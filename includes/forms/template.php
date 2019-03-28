@@ -99,6 +99,7 @@ function give_get_donation_form( $args = array() ) {
 	<div id="give-form-<?php echo $form->ID; ?>-wrap" class="<?php echo $form_wrap_classes; ?>">
 		<?php
 		if ( $form->is_close_donation_form() ) {
+			$form_title = ! is_singular( 'give_forms' ) ? apply_filters( 'give_form_title', '<h2 class="give-form-title">' . get_the_title( $form->ID ) . '</h2>' ) : '';
 
 			// Get Goal thank you message.
 			$goal_achieved_message = get_post_meta( $form->ID, '_give_form_goal_achieved_message', true );
@@ -129,8 +130,13 @@ function give_get_donation_form( $args = array() ) {
 			 */
 			do_action( 'give_pre_form', $form->ID, $args );
 
+			$gateways = give_get_enabled_payment_gateways( $form->ID );
+			foreach ( $gateways as $index => $gateway ) {
+				$gateways[$index]['label'] = $gateway['checkout_label'];
+			}
+
 			$form_args = array(
-				'id'                      => "give-form-{$form_id}",
+				'id'                      => "give-form-{$form->ID}",
 				'action'                  => esc_url_raw( $form_action ),
 				'method'                  => 'post',
 
@@ -193,7 +199,7 @@ function give_get_donation_form( $args = array() ) {
 						'label'              => '',
 						'wrapper_type'       => 'span',
 						'field_attributes'   => array(
-							'id'    => "give-form-honeypot-{$form_id}",
+							'id'    => "give-form-honeypot-{$form->ID}",
 							'class' => 'give-honeypot give-hidden',
 						),
 						'wrapper_attributes' => array(
@@ -250,8 +256,8 @@ function give_get_donation_form( $args = array() ) {
 							'payment-mode' => array(
 								'type'          => 'radio',
 								'label_position' => 'after',
-								'value'         => give_get_chosen_gateway( $form_id ),
-								'options'       => give_get_enabled_payment_gateways( $form_id ),
+								'value'         => give_get_chosen_gateway( $form->ID ),
+								'options'       => $gateways,
 								'wrapper'       => false,
 								'ul_attributes' => array( 'id' => 'give-gateway-radio-list', ),
 							),

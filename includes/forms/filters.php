@@ -455,7 +455,7 @@ function give_form_render_give_payment_modes_section( $field_html, $field, $form
 		 *
 		 * @since 1.7
 		 */
-		do_action( 'give_donation_form', $form_id );
+		do_action( 'give_donation_form', $form_id, array() );
 	echo '</div>';
 
 
