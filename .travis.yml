@@ -9,9 +9,11 @@ php:
   - 7.2
   - 7.3
 
+# The standard test environment.
 env:
   - WP_VERSION=latest WP_MULTISITE=0 PHP_LATEST_STABLE=7.1
 
+# This ensures we test in a WP multsite environment.
 matrix:
   include:
   - php: 5.6
