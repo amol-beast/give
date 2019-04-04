@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # usage: travis.sh before|after
 
-if [ $1 == 'before' ]; then
+if [[ $1 == 'before' ]]; then
 
 	# Composer install fails in PHP 5.2
 	[[ ${TRAVIS_PHP_VERSION} == '5.2' ]] && exit;
@@ -9,7 +9,7 @@ if [ $1 == 'before' ]; then
 	# No Xdebug and therefore no coverage in PHP 5.3
 	[[ ${TRAVIS_PHP_VERSION} == '5.3' ]] && exit;
 
-	if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then
+	if [[ ${TRAVIS_PHP_VERSION} == "7." ]]; then
 		composer global require "phpunit/phpunit=5.7.*"
 	else
 		composer global require "phpunit/phpunit=4.8.*"
@@ -38,7 +38,7 @@ if [ $1 == 'before' ]; then
 		#./vendor/bin/phpcs -p -s -n ./**/**/**/**/*.php --standard=./phpcs.ruleset.xml --extensions=php --ignore=./vendor/**/**/*.php --ignore=./tests/**/**/*.php
 	#fi
 
-elif [ $1 == 'after' ]; then
+elif [[ $1 == 'after' ]]; then
 
 	## Only run on master, not pull requests, latest stable PHP box (defined in .travis.yml).
 	if [[ ${TRAVIS_BRANCH} == 'master' ]] && [[ ${TRAVIS_EVENT_TYPE} != 'pull_request' ]] && [[ ${TRAVIS_PHP_VERSION} == ${PHP_LATEST_STABLE} ]]; then
