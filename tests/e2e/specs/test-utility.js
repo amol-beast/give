@@ -28,13 +28,15 @@ const helpers = {
 						page.waitForNavigation( { waitUntil: 'networkidle2' } )
 					])
 
+					page.waitForSelector( 'form[id="loginform"]' );
+
 					// Fill the login form with the username and password values.
 					await expect( page ).toFillForm( 'form[id="loginform"]', {
 						log: credentials.username,
 						pwd: credentials.password,
 					}, {
 						// This is a preventive measure in case if the form is not filled quickly.
-						timeout: 500000
+						timeout: 100000
 					})
 
 					/* Redirection after submission leads to race condition (known bug), below is
@@ -42,10 +44,10 @@ const helpers = {
 					 */
 					await Promise.all([
 						await page.click( '#wp-submit' ),
-						await page.waitForNavigation( { timeout: 500000 } ),
+						await page.waitForNavigation( { timeout: 100000 } ),
 					])
 				}
-			})
+			}, 100000 )
 		},
 
 		/**
