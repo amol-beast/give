@@ -156,7 +156,7 @@ class Give_Donor_List_Table extends WP_List_Table {
 			'<input class="donor-selector" type="checkbox" name="%1$s[]" value="%2$d" data-name="%3$s" />',
 			$this->_args['singular'],
 			$donor['id'],
-			$donor['name']
+			esc_attr( $donor['name'] )
 		);
 	}
 
@@ -175,7 +175,7 @@ class Give_Donor_List_Table extends WP_List_Table {
 		$view_url = admin_url( 'edit.php?post_type=give_forms&page=give-donors&view=overview&id=' . $donor['id'] );
 		$actions  = $this->get_row_actions( $donor );
 
-		return '<a href="' . esc_url( $view_url ) . '">' . $name . '</a>' . $this->row_actions( $actions );
+		return '<a href="' . esc_url( $view_url ) . '">' . esc_attr( $name )  . '</a>' . $this->row_actions( $actions );
 	}
 
 	/**
@@ -232,9 +232,9 @@ class Give_Donor_List_Table extends WP_List_Table {
 	public function get_row_actions( $donor ) {
 
 		$actions = array(
-			'view'   => sprintf( '<a href="%1$s" aria-label="%2$s">%3$s</a>', admin_url( 'edit.php?post_type=give_forms&page=give-donors&view=overview&id=' . $donor['id'] ), sprintf( esc_attr__( 'View "%s"', 'give' ), $donor['name'] ), __( 'View Donor', 'give' ) ),
-			'notes'  => sprintf( '<a href="%1$s" aria-label="%2$s">%3$s</a>', admin_url( 'edit.php?post_type=give_forms&page=give-donors&view=notes&id=' . $donor['id'] ), sprintf( esc_attr__( 'Notes for "%s"', 'give' ), $donor['name'] ), __( 'Notes', 'give' ) ),
-			'delete' => sprintf( '<a class="%1$s" data-id="%2$s" href="#" aria-label="%3$s">%4$s</a>', 'give-single-donor-delete', $donor['id'],sprintf( esc_attr__( 'Delete "%s"', 'give' ), $donor['name'] ), __( 'Delete', 'give' ) ),
+			'view'   => sprintf( '<a href="%1$s" aria-label="%2$s">%3$s</a>', admin_url( 'edit.php?post_type=give_forms&page=give-donors&view=overview&id=' . $donor['id'] ), sprintf( esc_attr__( 'View "%s"', 'give' ), esc_attr( $donor['name'] ) ), __( 'View Donor', 'give' ) ),
+			'notes'  => sprintf( '<a href="%1$s" aria-label="%2$s">%3$s</a>', admin_url( 'edit.php?post_type=give_forms&page=give-donors&view=notes&id=' . $donor['id'] ), sprintf( esc_attr__( 'Notes for "%s"', 'give' ), esc_attr( $donor['name'] ) ), __( 'Notes', 'give' ) ),
+			'delete' => sprintf( '<a class="%1$s" data-id="%2$s" href="#" aria-label="%3$s">%4$s</a>', 'give-single-donor-delete', $donor['id'],sprintf( esc_attr__( 'Delete "%s"', 'give' ), esc_attr( $donor['name'] ) ), __( 'Delete', 'give' ) ),
 		);
 
 		return apply_filters( 'give_donor_row_actions', $actions, $donor );
@@ -409,7 +409,7 @@ class Give_Donor_List_Table extends WP_List_Table {
 	 * @access public
 	 */
 	public function single_row( $item ) {
-		echo sprintf( '<tr id="donor-%1$d" data-id="%2$d" data-name="%3$s">', $item['id'], $item['id'], $item['name'] );
+		echo sprintf( '<tr id="donor-%1$d" data-id="%2$d" data-name="%3$s">', $item['id'], $item['id'], esc_attr( $item['name'] ) );
 		$this->single_row_columns( $item );
 		echo '</tr>';
 	}
